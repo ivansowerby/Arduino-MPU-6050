@@ -70,13 +70,14 @@ void StartMPU() {
 
 void ProcessAccelerationData() {
   Wire.beginTransmission(0b1101000); //I2C address of the MPU
-  Wire.write(0x3B); //Starting register for Accel Readings
+  Wire.write(0x3B); //Starting register for accelerometer
   Wire.endTransmission();
-  Wire.requestFrom(0b1101000,6); //Request Accel Registers (3B - 40)
+  Wire.requestFrom(0b1101000,6); //Request accelerometer registers (3B - 40)
   while(Wire.available() < 6);
-  xAcceleration = Wire.read()<<8|Wire.read(); //Store first two bytes into accelX
-  yAcceleration = Wire.read()<<8|Wire.read(); //Store middle two bytes into accelY
-  zAcceleration = Wire.read()<<8|Wire.read(); //Store last two bytes into accelZ
+  //Store recieved bytes in respective intergers:
+  xAcceleration = Wire.read()<<8|Wire.read();
+  yAcceleration = Wire.read()<<8|Wire.read();
+  zAcceleration = Wire.read()<<8|Wire.read();
   xForce = xAcceleration / AccelSensitivity;
   yForce = yAcceleration / AccelSensitivity;
   zForce = zAcceleration / AccelSensitivity;
@@ -84,13 +85,14 @@ void ProcessAccelerationData() {
 
 void ProcessGyroscopeData() {
   Wire.beginTransmission(0b1101000); //I2C address of the MPU
-  Wire.write(0x43); //Starting register for Gyro Readings
+  Wire.write(0x43); //Starting register for gyroscope
   Wire.endTransmission();
-  Wire.requestFrom(0b1101000,6); //Request Gyro Registers (43 - 48)
+  Wire.requestFrom(0b1101000,6); //Request Gryoscope Registers (43 - 48)
   while(Wire.available() < 6);
-  xGyroscope = Wire.read()<<8|Wire.read(); //Store first two bytes into accelX
-  yGyroscope = Wire.read()<<8|Wire.read(); //Store middle two bytes into accelY
-  zGyroscope = Wire.read()<<8|Wire.read(); //Store last two bytes into accelZ
+  //Store recieved bytes in respective intergers:
+  xGyroscope = Wire.read()<<8|Wire.read();
+  yGyroscope = Wire.read()<<8|Wire.read();
+  zGyroscope = Wire.read()<<8|Wire.read();
   xRotation = round((xGyroscope / GyroSensitivity) / 10) * 10 + xPrevRotation;
   yRotation = round((yGyroscope / GyroSensitivity) / 10) * 10 + yPrevRotation;
   zRotation = round((zGyroscope / GyroSensitivity) / 10) * 10 + zPrevRotation;
